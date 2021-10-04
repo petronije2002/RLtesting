@@ -6,7 +6,7 @@
       "type": "queueTrigger",
       "direction": "in",
       "queueName": "js-queue-items",
-      "connection": "DefaultEndpointsProtocol=https;AccountName=storageaccountrl123;AccountKey=z2WyAlRrsNweonBPs/uKxVZqojgeiVpa4S7gujyl42JAcCVE0MDEg2Nr7DmMk11/WVXeo61Z/VltMtf6g8SBiA==;EndpointSuffix=core.windows.net"
+      "connection": "AzureWebJobsStorage"
     }
   ]
 }
