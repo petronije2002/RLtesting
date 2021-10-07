@@ -60,8 +60,6 @@ def main(msg: func.QueueMessage) -> None:
 
         tableExperiment.upsert_entity(aa)
 
-        pass
-
     except:
 
         tableExperiment = table_service_client.get_table_client(table_name="Experiments")
@@ -96,7 +94,7 @@ def main(msg: func.QueueMessage) -> None:
 
         res = tableRL.query_entities(my_filter)
 
-        res = tableRL.query_entities(my_filter)
+        # res = tableRL.query_entities(my_filter)
 
         # take the first item
 
