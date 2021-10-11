@@ -33,12 +33,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         my_filter = "PartitionKey eq '{}'".format(bb['expID'])
         res = tableRL.query_entities(my_filter,results_per_page=1)
 
-        print("here")
+        #print("here")
         # tableRL = table_service_client.get_table_client(table_name=name_)
     
         item=res.next()
         
-        print("total time", time.time()-ee)
+        #print("total time", time.time()-ee)
 
         return func.HttpResponse(json.dumps({"best_opition": item['best_banner'],"default" : False}),status_code=200)
 

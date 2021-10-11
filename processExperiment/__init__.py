@@ -105,13 +105,13 @@ def main(msg: func.QueueMessage) -> None:
 
         my_filter = "PartitionKey eq '{}'".format(aa['expID'])
 
-        res = tableRL.query_entities(my_filter)
+        res = tableRL.query_entities(my_filter,results_per_page=1)
 
         # res = tableRL.query_entities(my_filter)
 
         # take the first item
 
-        print("Testing")
+        # print("Testing")
 
         try:
             item=res.next()
