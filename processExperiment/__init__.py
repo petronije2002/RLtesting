@@ -8,7 +8,7 @@ import ast
 import datetime
 from azure.core.credentials import AzureNamedKeyCredential
 from azure.data.tables import TableServiceClient, TableClient
-
+import time
 # credential = AzureNamedKeyCredential("storageaccountrl123", "z2WyAlRrsNweonBPs/uKxVZqojgeiVpa4S7gujyl42JAcCVE0MDEg2Nr7DmMk11/WVXeo61Z/VltMtf6g8SBiA==")
 
 # service = TableServiceClient(endpoint="https://storageaccountrl123.table.core.windows.net/testTable", credential=credential)
@@ -35,13 +35,15 @@ def isThereTable(table_service_client,table_name):
 
 def main(msg: func.QueueMessage) -> None:
 
+    aaa= time.time()
+
     conn_string_for_table = os.environ["AzureWebJobsStorage"]
     service = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
     
     # create Experiments table
 
     service.create_table_if_not_exists("Experiments")
-    print("PORUKA", msg, type(msg))
+    # print("PORUKA", msg, type(msg))
 
     aa=msg.get_json()
 
@@ -52,25 +54,34 @@ def main(msg: func.QueueMessage) -> None:
 
     table_service_client = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
     
-
+    print("First part",aaa -time.time())
 
     try:
+
+        time_try= time.time()
 
         tableExperiment = table_service_client.create_table(table_name="Experiments")
 
         tableExperiment.upsert_entity(aa)
 
+
+
     except:
+
+        except_time= time.time()
 
         tableExperiment = table_service_client.get_table_client(table_name="Experiments")
 
         tableExperiment.upsert_entity(aa)
+
+
+        print("Exceptionn time", except_time - time.time())
         
 
     
     name_ = "exp" + str(aa["expID"])
 
-    print(name_)
+    # print(name_)
 
     #test if there is a table for that experiment 
 
@@ -84,9 +95,11 @@ def main(msg: func.QueueMessage) -> None:
         exp_row ={"PartitionKey": aa['PartitionKey'], "RowKey":aa['RowKey'],"expID": aa['expID'] ,"Q": str(Q),"sum_rewards":str(sum_rewards),"count":str(count)}
 
         tableRL.upsert_entity(exp_row)
+
+        # print("There was not table")
     except:
 
-        print("DFSDFSDFS")
+        insert_time = time.time()
 
         tableRL = table_service_client.get_table_client(table_name=name_)
 
@@ -98,9 +111,11 @@ def main(msg: func.QueueMessage) -> None:
 
         # take the first item
 
+        print("Testing")
+
         try:
             item=res.next()
-            print (item)
+            # print (item)
 
         except:
             item=None
@@ -128,7 +143,7 @@ def main(msg: func.QueueMessage) -> None:
 
             Q[current_banner] = sum_rewards[current_banner]/counter[current_banner]
 
-            banner = epsilon_greedy_policy(0.1,Q)
+            banner = epsilon_greedy_policy(0.2,Q)
 
 
             new_updated_item = { "PartitionKey": item['PartitionKey'],
@@ -142,8 +157,12 @@ def main(msg: func.QueueMessage) -> None:
 
             tableRL.upsert_entity(new_updated_item)
 
-            print(new_updated_item)
-            print("proposed banner",banner)
+            # print(new_updated_item)
+            # print("proposed banner",banner)
+
+            bbb = time.time()
+
+            print("Total time",bbb - insert_time)
 
 
         logging.info('Python queue trigger function processed a queue item: %s',
