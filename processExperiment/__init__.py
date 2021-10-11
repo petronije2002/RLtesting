@@ -35,7 +35,7 @@ def isThereTable(table_service_client,table_name):
 
 def main(msg: func.QueueMessage) -> None:
 
-    aaa= time.time()
+    # aaa= time.time()
 
     conn_string_for_table = os.environ["AzureWebJobsStorage"]
     service = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
@@ -54,7 +54,7 @@ def main(msg: func.QueueMessage) -> None:
 
     table_service_client = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
     
-    print("First part",aaa -time.time())
+    # print("First part",aaa -time.time())
 
     try:
 
@@ -160,9 +160,9 @@ def main(msg: func.QueueMessage) -> None:
             # print(new_updated_item)
             # print("proposed banner",banner)
 
-            bbb = time.time()
+            # bbb = time.time()
 
-            print("Total time",bbb - insert_time)
+            # print("Total time",bbb - insert_time)
 
 
         logging.info('Python queue trigger function processed a queue item: %s',

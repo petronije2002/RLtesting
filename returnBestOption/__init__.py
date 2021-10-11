@@ -16,22 +16,29 @@ import time
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
-    ee = time.time()
+    # ee = time.time()
     
     bb = req.get_json()
-    conn_string_for_table = os.environ["AzureWebJobsStorage"]
+    # conn_string_for_table = os.environ["AzureWebJobsStorage"]
   
-    table_service_client = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
+    # table_service_client = TableServiceClient.from_connection_string(conn_str=conn_string_for_table)
     
 
     try:
         name_ = "exp" + str(bb["expID"])
 
-        tableRL = table_service_client.get_table_client(table_name=name_)
+        credential = AzureNamedKeyCredential(os.environ['StorageAccountName'],os.environ['StorageKey'] )
+
+
+
+        tc =TableClient(endpoint=os.environ['StorageAccountEndpoint'],table_name=name_,credential=credential)
+
+
+        # tableRL = tc.get_table_client(table_name=name_)
 
         #print("here")
         my_filter = "PartitionKey eq '{}'".format(bb['expID'])
-        res = tableRL.query_entities(my_filter,results_per_page=1)
+        res = tc.query_entities(my_filter,results_per_page=1)
 
         #print("here")
         # tableRL = table_service_client.get_table_client(table_name=name_)
